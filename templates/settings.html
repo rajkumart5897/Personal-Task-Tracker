@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Settings · TaskFlow</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">✓</span>TaskFlow</a>
+        <nav class="side-nav" aria-label="Main navigation">
+          <a href="{{ url_for('index') }}"><span aria-hidden="true">⌂</span> Dashboard</a>
+          <a class="active" href="{{ url_for('settings') }}"><span aria-hidden="true">⚙</span> Settings</a>
+          <a href="{{ url_for('logout') }}"><span aria-hidden="true">⇥</span> Logout</a>
+        </nav><p class="sidebar-footer">Simple task management</p>
+      </aside>
+      <main class="dashboard-main settings-main">
+        <header class="dashboard-header"><button class="menu-button" type="button" data-menu-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">☰</button><div><p class="eyebrow">Account</p><h1>Settings</h1><p class="welcome">Manage your account and data.</p></div><a class="back-link" href="{{ url_for('index') }}">← Tasks</a></header>
+        {% with messages = get_flashed_messages(with_categories=true) %}{% for category, text in messages %}<p class="flash {{ category }}">{{ text }}</p>{% endfor %}{% endwith %}
+        <div class="settings-grid">
+          <section class="settings-card"><div class="section-icon">◉</div><div><p class="section-label">Account</p><h2>Account details</h2><p class="settings-copy">Signed in as</p><p class="account-email">{{ email }}</p></div></section>
+          <section class="settings-card"><div class="section-icon">⌁</div><div class="settings-content"><p class="section-label">Account</p><h2>Change password</h2><form action="{{ url_for('update_password') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label for="current_password">Current password</label><input id="current_password" name="current_password" type="password" required autocomplete="current-password"><label for="new_password">New password</label><input id="new_password" name="new_password" type="password" required minlength="8" maxlength="256" autocomplete="new-password"><button class="primary-button form-button" type="submit">Update password</button></form></div></section>
+          <section class="settings-card"><div class="section-icon">⇅</div><div class="settings-content"><p class="section-label">Data</p><h2>Your tasks</h2><p class="settings-copy">Download a backup or import a task list from JSON.</p><div class="data-actions"><a class="secondary-button button-anchor" href="{{ url_for('export_tasks') }}">Export tasks</a><form id="import-form"><label for="import-file">Import JSON file</label><input id="import-file" name="file" type="file" accept="application/json,.json" required><button class="primary-button form-button" type="submit">Import tasks</button></form></div><p id="import-message" class="page-message" aria-live="polite"></p></div></section>
+          <section class="settings-card"><div class="section-icon">§</div><div><p class="section-label">Legal</p><h2>Privacy &amp; terms</h2><p class="settings-copy">Read how local data is handled and the application terms.</p><div class="legal-links"><a href="{{ url_for('privacy') }}">Privacy Policy →</a><a href="{{ url_for('terms') }}">Terms &amp; Conditions →</a></div></div></section>
+          <section class="settings-card session-card"><div class="section-icon">⇥</div><div><p class="section-label">Session</p><h2>Sign out</h2><p class="settings-copy">End this browser session on this device.</p><a class="danger-link" href="{{ url_for('logout') }}">Log out</a></div></section>
+        </div>
+      </main>
+    </div><script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

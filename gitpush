@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$1" ]; then
+  echo "❌ Usage: gitpush \"commit message\""
+  exit 1
+fi
+
+echo "📦 Adding changes..."
+git add .
+
+# Only commit if there are changes
+if git diff --cached --quiet; then
+  echo "⚠️ No changes to commit"
+else
+  echo "📝 Committing..."
+  git commit -m "$1"
+fi
+
+echo "🔄 Pulling latest changes..."
+git pull origin main --rebase
+
+echo "🚀 Pushing..."
+git push
+
+echo "✅ Done."

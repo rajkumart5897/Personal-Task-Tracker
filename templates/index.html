@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>TaskFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">✓</span>TaskFlow</a>
+        <nav class="side-nav" aria-label="Main navigation">
+          <a class="active" href="{{ url_for('index') }}"><span aria-hidden="true">⌂</span> Dashboard</a>
+          <a href="{{ url_for('settings') }}"><span aria-hidden="true">⚙</span> Settings</a>
+          <a href="{{ url_for('logout') }}"><span aria-hidden="true">⇥</span> Logout</a>
+        </nav>
+        <p class="sidebar-footer">Simple task management</p>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-header">
+          <button class="menu-button" type="button" data-menu-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">☰</button>
+          <div><p class="eyebrow">Dashboard</p><h1>TaskFlow</h1><p class="welcome">Welcome back!</p></div>
+          <div class="user-email" title="{{ email }}"><span class="avatar" aria-hidden="true">{{ email[0]|upper }}</span><span>{{ email }}</span></div>
+        </header>
+
+        <section class="stats-grid" aria-label="Task statistics">
+          <article class="stat-card todo"><span>Todo</span><strong id="todo-count">0</strong></article>
+          <article class="stat-card progress"><span>In Progress</span><strong id="progress-count">0</strong></article>
+          <article class="stat-card done"><span>Done</span><strong id="done-count">0</strong></article>
+        </section>
+
+        <section class="tasks-toolbar" aria-label="Task actions">
+          <label class="search-field" for="task-search"><span aria-hidden="true">⌕</span><input id="task-search" type="search" placeholder="Search tasks"></label>
+          <button class="primary-button" type="button" data-new-task>＋ New Task</button>
+        </section>
+        <p id="message" class="page-message" aria-live="polite"></p>
+        <section id="task-list" class="task-list" aria-live="polite" aria-label="Tasks"></section>
+      </main>
+    </div>
+
+    <dialog class="modal" id="task-modal" aria-labelledby="task-modal-title">
+      <form id="task-form" class="modal-card">
+        <div class="modal-header"><h2 id="task-modal-title">New task</h2><button class="icon-button" type="button" data-close-task-modal aria-label="Close">×</button></div>
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" required maxlength="200" placeholder="What needs to be done?">
+        <label for="description">Description <span>(optional)</span></label>
+        <textarea id="description" name="description" rows="4" maxlength="5000" placeholder="Add details..."></textarea>
+        <div class="modal-actions"><button class="secondary-button" type="button" data-close-task-modal>Cancel</button><button class="primary-button" type="submit">Save</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="delete-modal" aria-labelledby="delete-modal-title">
+      <div class="modal-card delete-dialog"><div class="modal-header"><h2 id="delete-modal-title">Delete task?</h2><button class="icon-button" type="button" data-close-delete-modal aria-label="Close">×</button></div><p>This action cannot be undone.</p><div class="modal-actions"><button class="secondary-button" type="button" data-close-delete-modal>Cancel</button><button class="danger-button" id="confirm-delete" type="button">Delete</button></div></div>
+    </dialog>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
