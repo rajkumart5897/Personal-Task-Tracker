@@ -104,4 +104,8 @@ Since there's no automated test suite: registration/login/logout, cross-account 
 
 ## License
 
+<<<<<<< HEAD
 MIT
+=======
+MIT
+>>>>>>> 830c426 (Update project)
