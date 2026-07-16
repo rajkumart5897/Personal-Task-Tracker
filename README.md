@@ -1,73 +1,86 @@
 # Task Manager
 
-A local task management app built with Flask, SQLite, and vanilla JavaScript. Each account has its own private task list.
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
+![Flask](https://img.shields.io/badge/flask-black.svg)
+![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
 
-## Features
+A small, self-hosted, multi-user task tracker. Flask backend, SQLite storage, vanilla JavaScript frontend — no build step, no ORM, no frontend framework.
 
-- Create tasks with a title and optional description
-- View saved tasks
-- Edit task details
-- Set each task to `Todo`, `In Progress`, or `Done`
-- Delete tasks
-- Register, log in, and log out using locally stored password hashes
-- Change passwords and import/export task data as JSON
-- Persist account and task data locally in SQLite
+## What this is (and isn't)
 
-## Requirements
+This is a **local, single-machine task manager**, built to practice full-stack fundamentals with real attention to backend security — not a hosted product. It's meant to run on your own machine or a trusted private server, for you and anyone else you register an account for.
 
-- Python 3.10 or newer
-- Flask
+It is **not** rate-limited against brute-force login attempts, **not** built for public internet exposure without additional hardening, and **not** using an ORM or migrations system — schema changes are handled by a simple one-time migration path in `init_db()`.
 
-Install Flask if it is not already available:
+## Highlights
+
+- Per-account task isolation — every query is scoped to the logged-in user's ID, verified at the database layer
+- Passwords stored only as salted hashes (Werkzeug's `generate_password_hash`, PBKDF2 by default) — never logged, never persisted in plaintext
+- CSRF tokens on every state-changing request, compared with `secrets.compare_digest` to avoid timing attacks
+- Task content is escaped before it's injected into the DOM — no stored XSS via task titles/descriptions
+- CSP, `X-Content-Type-Options`, and `Referrer-Policy` headers set on every response
+- JSON import/export, validated through the same path as manual task creation — no "trusted" shortcut for imports
+
+## Quick start
 
 ```bash
 python3 -m pip install flask
-```
-
-## Run locally
-
-```bash
 python3 app.py
 ```
 
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in a browser.
+Open `http://127.0.0.1:5000`. A `database.db` file is created automatically on first run.
 
-The application creates `database.db` automatically on its first run.
-
-For stable login sessions across server restarts, set a secret key before starting the app:
+For sessions that survive a server restart, set a secret key first:
 
 ```bash
 export TASK_MANAGER_SECRET_KEY="replace-with-a-long-random-value"
 python3 app.py
 ```
 
-## Project structure
+## Features
 
-```text
-.
-├── app.py                 # Flask app, authentication, and JSON task API
-├── database.db            # Local SQLite data (created at runtime)
-├── templates/
-│   ├── index.html         # Authenticated task manager
-│   ├── login.html         # Login page
-│   ├── register.html      # Registration page
-│   ├── settings.html      # Password and import/export settings
-│   ├── privacy.html       # Privacy policy
-│   └── terms.html         # Terms and conditions
-└── static/
-    ├── app.js             # Browser-side API calls and rendering
-    └── style.css          # UI styles
-```
+- Create, edit, and delete tasks with a title and optional description
+- Set status to `Todo`, `In Progress`, or `Done`
+- Register, log in, log out — locally stored password hashes only
+- Change password from Settings
+- Export all tasks as `tasks.json`, import from a JSON file (capped at 1,000 tasks per import)
 
 ## API
 
 | Method | Path | Purpose |
-| --- | --- | --- |
+|---|---|---|
 | `GET` | `/api/tasks` | List the logged-in user's tasks |
 | `POST` | `/api/tasks` | Create a task |
 | `PUT` | `/api/tasks/<id>` | Update one of the user's tasks |
 | `DELETE` | `/api/tasks/<id>` | Delete one of the user's tasks |
-| `GET` | `/api/tasks/export` | Download the user's tasks as `tasks.json` |
+| `GET` | `/api/tasks/export` | Download tasks as `tasks.json` |
 | `POST` | `/api/tasks/import` | Import tasks from a JSON upload |
 
-For create and update requests, send JSON with `title`, `description`, and (for updates) a valid `status`: `Todo`, `In Progress`, or `Done`. Authenticated state-changing API requests also require the CSRF token rendered by the application.
+`title`, `description`, and (on update) a valid `status` are required in the request body. All state-changing requests need the CSRF token issued to the session — sent as `X-CSRF-Token` for API calls, or as a hidden form field for HTML forms.
+
+## Project structure
+
+```
+.
+├── app.py                 # Flask app, auth, CSRF, and the task API
+├── database.db            # SQLite data, created at runtime
+├── templates/              # Jinja templates (auth pages, dashboard, settings, legal)
+└── static/
+    ├── app.js              # Fetch calls + DOM rendering
+    └── style.css
+```
+
+## Known limitations
+
+- No login rate limiting — repeated password guesses against `/login` aren't throttled
+- Minor timing difference between "no such account" and "wrong password" responses on login
+- `SESSION_COOKIE_SECURE` isn't set — fine over local HTTP, would need adding before running behind HTTPS
+- No automated test suite yet — verification is currently manual (see below)
+
+## Manual verification checklist
+
+Since there's no automated test suite: registration/login/logout, cross-account task isolation, full CRUD, invalid-status handling, password change, and import/export should all be re-checked by hand after backend changes.
+
+## License
+
+MIT
