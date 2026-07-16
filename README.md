@@ -11,7 +11,7 @@ A small, self-hosted, multi-user task tracker. Flask backend, SQLite storage, va
 <table>
   <tr>
     <td width="50%"><img src="docs/screenshots/login.png" alt="Login page" /></td>
-    <td width="50%"><img src="docs/screenshots/dashboard.png" alt="Task dashboard" /></td>
+    <td width="50%"><img src="docs/screenshots/dashboard.png" alt="Dashboard" /></td>
   </tr>
   <tr>
     <td align="center"><sub>Login</sub></td>
