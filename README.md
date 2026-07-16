@@ -1,4 +1,4 @@
-# Task Manager
+# Personal Task Tracker
 
 ![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-black.svg)
