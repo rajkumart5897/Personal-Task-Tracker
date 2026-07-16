@@ -6,6 +6,27 @@
 
 A small, self-hosted, multi-user task tracker. Flask backend, SQLite storage, vanilla JavaScript frontend — no build step, no ORM, no frontend framework.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/login.png" alt="Login page" /></td>
+    <td width="50%"><img src="docs/screenshots/dashboard.png" alt="Task dashboard" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Login</sub></td>
+    <td align="center"><sub>Dashboard</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/new-task.png" alt="New task modal" /></td>
+    <td width="50%"><img src="docs/screenshots/settings.png" alt="Settings page" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>New task</sub></td>
+    <td align="center"><sub>Settings</sub></td>
+  </tr>
+</table>
+
 ## What this is (and isn't)
 
 This is a **local, single-machine task manager**, built to practice full-stack fundamentals with real attention to backend security — not a hosted product. It's meant to run on your own machine or a trusted private server, for you and anyone else you register an account for.
