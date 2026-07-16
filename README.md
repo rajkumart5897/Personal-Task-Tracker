@@ -105,4 +105,3 @@ Since there's no automated test suite: registration/login/logout, cross-account 
 ## License
 
 MIT
-
