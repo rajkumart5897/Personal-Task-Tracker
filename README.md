@@ -18,7 +18,7 @@ A small, self-hosted, multi-user task tracker. Flask backend, SQLite storage, va
     <td align="center"><sub>Dashboard</sub></td>
   </tr>
   <tr>
-    <td width="50%"><img src="docs/screenshots/new-task.png" alt="New task modal" /></td>
+    <td width="50%"><img src="docs/screenshots/account_creation.png" alt="Account Creation" /></td>
     <td width="50%"><img src="docs/screenshots/settings.png" alt="Settings page" /></td>
   </tr>
   <tr>
